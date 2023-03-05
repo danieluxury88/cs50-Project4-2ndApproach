@@ -1,0 +1,4 @@
+*.cpython-39.pyc
+*.pyc
+*.sqlite3
+/.idea
