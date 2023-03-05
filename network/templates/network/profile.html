@@ -2,6 +2,9 @@
 
 {% block body %}
 <h1>{{page_name}}</h1>
+
+
+
 {% if user.is_authenticated %}
 <form action="create_post" method="post" class="post-form">
     {% csrf_token %}

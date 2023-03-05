@@ -15,8 +15,8 @@ def index(request):
     page_number = request.GET.get('page')
     page_posts = paginator.get_page(page_number)
 
-
     context = {'posts': page_posts}
+    context = {'posts': page_posts, 'page_name': 'All Posts'}
     return render(request, "network/index.html", context)
 
 
@@ -76,6 +76,19 @@ def create_post(request):
     if request.method == "POST":
         content = request.POST['content']
         user = User.objects.get(id=request.user.id)
-        post = Post(author = user, content = content)
+        post = Post(author=user, content=content)
         post.save()
     return HttpResponseRedirect(reverse(index))
+
+
+def profile(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    posts = Post.objects.filter(author=user).order_by('-timestamp')
+
+    paginator = Paginator(posts, 2)
+    page_number = request.GET.get('page')
+    page_posts = paginator.get_page(page_number)
+
+    context = {'posts': page_posts, 'page_name': user.username + " Posts" }
+    return render(request, "network/profile.html", context)
