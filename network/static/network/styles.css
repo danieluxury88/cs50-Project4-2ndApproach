@@ -1,0 +1,11 @@
+@viewport {
+width: device-width;
+}
+
+.post-form{
+    display: flex;
+    justify-content: flex-start;
+    width:  device-width;
+    margin: 3%;
+    border: 1px;
+}

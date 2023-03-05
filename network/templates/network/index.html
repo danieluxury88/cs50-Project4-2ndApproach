@@ -1,5 +1,16 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+<h1>All Posts</h1>
+{% if user.is_authenticated %}
+<form action="create_post" method="post" class="post-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="postTextArea">What are you thinking?</label>
+        <textarea name="content" class="form-control" id="postTextArea" rows="3" placeholder="Share your thoughts"></textarea>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+{% endif %}
 {% endblock %}
