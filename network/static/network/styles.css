@@ -4,8 +4,17 @@ width: device-width;
 
 .post-form{
     display: flex;
-    justify-content: flex-start;
+    flex-direction:column;
     width:  device-width;
     margin: 3%;
-    border: 1px;
+}
+
+.post-form textarea{
+    flex:1;
+    resize:none;
+}
+
+.single-post{
+    margin: 3%;
+    border: solid gray 1px
 }

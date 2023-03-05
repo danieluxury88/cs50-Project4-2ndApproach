@@ -6,11 +6,29 @@
 <form action="create_post" method="post" class="post-form">
     {% csrf_token %}
     <div class="form-group">
-        <label for="postTextArea">What are you thinking?</label>
-        <textarea name="content" class="form-control" id="postTextArea" rows="3" placeholder="Share your thoughts"></textarea>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <textarea name="content" class="form-control" id="postTextArea" rows="3"
+                  placeholder="Share your thoughts"></textarea>
     </div>
+    <button type="submit" class="btn btn-primary">Post</button>
 </form>
 
 {% endif %}
+
+<div>
+    {% for post in posts %}
+    <div class="card text-center single-post">
+        <div class="card-header">
+            {{post.author}}
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ post.content }}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+        <div class="card-footer text-muted">
+            {{post.timestamp}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
