@@ -22,17 +22,34 @@
     </div>
 </div>
 
-
 {% if user.is_authenticated %}
-<form action="create_post" method="post" class="post-form">
-    {% csrf_token %}
-    <div class="form-group">
-        <textarea name="content" class="form-control" id="postTextArea" rows="3"
-                  placeholder="Share your thoughts"></textarea>
+    {% if relationship != "owner" %}
+    <div class="form-group" class="form-control">
+        <form action="{% url 'follow' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="user" value = {{user_id}} >
+            {% if relationship == "following" %}
+                <input type="submit" name="action" value="Unfollow" class="btn btn-danger">
+            {% elif relationship == "followed" %}
+                <input type="submit" name="action" value="Follow Back" class="btn btn-success">
+            {% elif relationship == "none" %}
+                <input type="submit" name="action" value="Follow" class="btn btn-primary">
+            {% endif %}
+            </form>
     </div>
-    <button type="submit" class="btn btn-primary">Post</button>
-</form>
+    {% else %}
+    <form action="create_post" method="post" class="post-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <textarea name="content" class="form-control" id="postTextArea" rows="3"
+                      placeholder="Share your thoughts"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+    {% endif %}
+
 {% endif %}
+
 
 <div>
     {% for post in posts %}

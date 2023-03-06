@@ -104,11 +104,32 @@ def profile(request, user_id):
     elif user.following.filter(user=request.user).exists():
         relationship = 'followed'
 
-
     context = {'posts': page_posts,
+               'user_id': user_id,
                'page_name': user.username + " Posts",
                'reg_date': user.registration_date.strftime("%B %Y "),
                'followers': followers,
                'following': following,
                'relationship': relationship, }
     return render(request, "network/profile.html", context)
+
+
+def handle_follow_action(requester_id, user_id, action):
+    requester = User.objects.get(id=requester_id)
+    user = User.objects.get(id=user_id)
+    if action == "Unfollow":
+        follow_process = Follow.objects.get(user=user, follower=requester)
+        follow_process.delete()
+    else:
+        follow_process = Follow(user=user, follower=requester)
+        follow_process.save()
+
+
+def follow(request):
+    if request.method == "POST":
+        requester = request.user.id
+        user_to_relate = request.POST["user"]
+        action = request.POST["action"]
+
+        handle_follow_action(request.user.id, user_to_relate, action)
+    return profile(request, user_to_relate)

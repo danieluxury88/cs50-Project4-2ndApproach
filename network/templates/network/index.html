@@ -16,9 +16,11 @@
 <div>
     {% for post in posts %}
     <div class="card text-center single-post">
+        <a href=" {% url 'profile' user_id=post.author.id %}">
         <div class="card-header">
             {{post.author}}
         </div>
+        </a>
         <div class="card-body">
             <p class="card-text">{{ post.content }}</p>
             <a href="#" class="btn btn-primary">Go somewhere</a>
