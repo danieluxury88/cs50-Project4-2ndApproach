@@ -91,9 +91,24 @@ def profile(request, user_id):
     page_number = request.GET.get('page')
     page_posts = paginator.get_page(page_number)
 
+    requester = request.user.id
+    relationship = 'none'
+
+    if requester == user_id:
+        relationship = 'owner'
+    # elif Follow.objects.filter(user=user, follower=request.user).exists():
+    #     relationship = 'following'
+    # using reverse relation!
+    elif user.followers.filter(follower=request.user).exists():
+        relationship = 'following'
+    elif user.following.filter(user=request.user).exists():
+        relationship = 'followed'
+
+
     context = {'posts': page_posts,
                'page_name': user.username + " Posts",
                'reg_date': user.registration_date.strftime("%B %Y "),
                'followers': followers,
-               'following': following}
+               'following': following,
+               'relationship': relationship, }
     return render(request, "network/profile.html", context)

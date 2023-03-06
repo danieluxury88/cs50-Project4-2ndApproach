@@ -4,8 +4,8 @@ from django.db import models
 
 class User(AbstractUser):
      registration_date = models.DateTimeField(auto_now_add=True)
-#
-#
+
+
 class Post(models.Model):
     author = models.ForeignKey("User", on_delete=models.CASCADE, related_name="author")
     content = models.TextField(blank=False)
