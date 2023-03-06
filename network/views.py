@@ -4,6 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+import json
+
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post, Follow
 
@@ -155,3 +159,14 @@ def following(request):
     context = {'posts': page_posts}
     context = {'posts': page_posts, 'page_name': 'Following Posts'}
     return render(request, "network/index.html", context)
+
+@csrf_exempt
+def edit(request, post_id):
+    if request.method == "POST":
+        print("recieved request")
+        data = json.loads(request.body)
+        post = Post.objects.get(id = post_id )
+        post.content = data["content"]
+        post.save()
+        return JsonResponse({"msg":"OK", "data":data["content"]})
+
