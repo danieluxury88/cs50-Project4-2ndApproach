@@ -38,7 +38,7 @@
             </form>
     </div>
     {% else %}
-    <form action="create_post" method="post" class="post-form">
+    <form action="{% url 'create_post' %}" method="post" class="post-form">
         {% csrf_token %}
         <div class="form-group">
             <textarea name="content" class="form-control" id="postTextArea" rows="3"
@@ -71,7 +71,7 @@
 
 <nav class="d-flex justify-content-around" aria-label="Page navigation example">
   <ul class="pagination" style="text-align:center;">
-      {% if posts.paginator.count != 0 %}
+      {% if posts.has_next %}
           {% if posts.has_previous %}
             <li class="page-item"><a class="page-link" href="?page={{posts.previous_page_number}}">Previous</a></li>
           {% endif %}

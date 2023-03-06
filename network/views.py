@@ -11,7 +11,7 @@ from .models import User, Post, Follow
 def index(request):
     posts = Post.objects.all().order_by('-timestamp')
 
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_posts = paginator.get_page(page_number)
 
@@ -87,7 +87,7 @@ def profile(request, user_id):
     followers = Follow.objects.filter(user=user)
     following = Follow.objects.filter(follower=user)
 
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_posts = paginator.get_page(page_number)
 
@@ -133,3 +133,25 @@ def follow(request):
 
         handle_follow_action(request.user.id, user_to_relate, action)
     return profile(request, user_to_relate)
+
+
+def following(request):
+    requester = request.user
+    followings = requester.following.all()
+    following_users = [followings.user for followings in followings]
+
+    posts=[]
+    for user in following_users:
+        user_posts = user.post.all()
+        posts.append(user_posts)
+
+    flattened_posts = [post for sublist in posts for post in sublist]
+    sorted_posts = sorted(flattened_posts, key=lambda post: post.timestamp, reverse=True)
+
+    paginator = Paginator(sorted_posts, 10)
+    page_number = request.GET.get('page')
+    page_posts = paginator.get_page(page_number)
+
+    context = {'posts': page_posts}
+    context = {'posts': page_posts, 'page_name': 'Following Posts'}
+    return render(request, "network/index.html", context)

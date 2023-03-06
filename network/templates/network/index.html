@@ -35,7 +35,7 @@
 
 <nav class="d-flex justify-content-around" aria-label="Page navigation example">
   <ul class="pagination" style="text-align:center;">
-      {% if posts.paginator.count != 0 %}
+        {% if posts.has_next %}
           {% if posts.has_previous %}
             <li class="page-item"><a class="page-link" href="?page={{posts.previous_page_number}}">Previous</a></li>
           {% endif %}
