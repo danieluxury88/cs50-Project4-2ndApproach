@@ -18,20 +18,33 @@
 <div>
     {% for post in posts %}
     <div class="card text-center single-post" id="post_id_{{post.id}}">
+
         <div class="card-header">
             <a href=" {% url 'profile' user_id=post.author.id %}">
             {{post.author}}
             </a>
         </div>
         <div class="card-body">
-            <p class="card-text" id ="post_content_{{post.id}}">{{ post.content }}</p>
+            <p class="card-text" id ="post_content_{{post.id}}">{{ post.content }} </p>
+            <span class="badge bg-light text-dark" id="likes_counter_{{post.id}}">{{post.likers.count}} Likes</span>
         </div>
         <div class="card-footer text-muted">
             {{post.timestamp}}
         </div>
-        {% if user.is_authenticated and user == post.author %}
-        <button type="submit" class="btn btn-primary btn-block" id="edit_btn_{{post.id}}" onclick="showModalWindow( '{{post.content}}', {{post.id}} )">Edit</button>
+        {% if user.is_authenticated %}
+            {%  if post.author.id == user.id %}
+                <button type="submit" class="btn btn-primary col-3" id="edit_btn_{{post.id}}" onclick="showModalWindow( '{{post.content}}', {{post.id}} )">Edit</button>
+            {% else %}
+            {% if user in post.likers.all %}
+                <button type="submit" class="btn-danger col-3" id="like_btn_{{post.id}}" onclick='reactToPost( {{post.id}},"remove" )' style="display:block;">Remove Like</button>
+                <button type="submit" class="btn btn-success col-3" id="dislike_btn_{{post.id}}" onclick='reactToPost( {{post.id}}, "add")'style="display:none;">Like</button>
+            {% else %}
+                <button type="submit" class="btn-danger col-3" id="like_btn_{{post.id}}" onclick='reactToPost( {{post.id}},"remove" )' style="display:none;">Remove Like</button>
+                <button type="submit" class="btn btn-success col-3" id="dislike_btn_{{post.id}}" onclick='reactToPost( {{post.id}}, "add")'style="display:block;">Like</button>
+            {% endif %}
+            {% endif %}
         {% endif %}
+
     </div>
     {% endfor %}
 </div>

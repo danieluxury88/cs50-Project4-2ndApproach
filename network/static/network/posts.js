@@ -37,3 +37,31 @@ function updatePostContent(){
         console.log(result);
     });
 }
+
+function reactToPost (post_id, value) {
+    let like_btn = document.getElementById(`like_btn_${post_id}`);
+    let dislike_btn = document.getElementById(`dislike_btn_${post_id}`);
+    let likes_counter = document.getElementById(`likes_counter_${post_id}`);
+
+    if ( value == "add" ) {
+        like_btn.style.display = 'block';
+        dislike_btn.style.display = 'none';
+    }
+    else {
+        like_btn.style.display = 'none';
+        dislike_btn.style.display = 'block';
+    }
+
+    fetch(`/like/${post_id}`, {
+      method: 'POST',
+      body: JSON.stringify({
+          id: post_id,
+          action:value,
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        likes_counter.innerHTML= result.likers+ " Likes";
+    });
+}

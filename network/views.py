@@ -144,7 +144,7 @@ def following(request):
     followings = requester.following.all()
     following_users = [followings.user for followings in followings]
 
-    posts=[]
+    posts = []
     for user in following_users:
         user_posts = user.post.all()
         posts.append(user_posts)
@@ -160,13 +160,30 @@ def following(request):
     context = {'posts': page_posts, 'page_name': 'Following Posts'}
     return render(request, "network/index.html", context)
 
+
 @csrf_exempt
 def edit(request, post_id):
     if request.method == "POST":
-        print("recieved request")
         data = json.loads(request.body)
-        post = Post.objects.get(id = post_id )
+        post = Post.objects.get(id=post_id)
         post.content = data["content"]
         post.save()
-        return JsonResponse({"msg":"OK", "data":data["content"]})
+        return JsonResponse({"msg": "OK", "data": data["content"]})
 
+
+@csrf_exempt
+def like(request, post_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        post = Post.objects.get(id=post_id)
+        action = data["action"]
+        requester = request.user
+
+        if action == "add":
+            post.likers.add(requester)
+            post.save()
+        else:
+            post.likers.remove(requester)
+            post.save()
+        post_likes = post.likers.count()
+        return JsonResponse({"msg": "OK", "likers": post_likes})
