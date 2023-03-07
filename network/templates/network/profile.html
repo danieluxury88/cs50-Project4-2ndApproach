@@ -62,7 +62,8 @@
                 {{post.author}} </a>
         </div>
         <div class="card-body">
-            <p class="card-text" id ="post_content_{{post.id}}">{{ post.content }}</p>
+            <p class="card-text" id ="post_content_{{post.id}}">{{ post.content }} </p>
+            <span class="badge bg-light text-dark" id="likes_counter_{{post.id}}">{{post.likers.count}} Likes</span>
         </div>
         <div class="card-footer text-muted">
             {{post.timestamp}}
